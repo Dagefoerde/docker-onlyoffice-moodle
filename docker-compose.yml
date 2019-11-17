@@ -1,22 +1,31 @@
 version: '3'
 services:
+  db:
+    container_name: moodle-postgres
+    image: postgres:10.6
+    expose:
+      - '5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=RANDMStrUmaY!Gue$$
+      - POSTGRES_DB=moodle
+    volumes:
+      - db_data:/var/lib/postgresql/data
   app:
     container_name: app-server
     image: moodlehq/moodle-php-apache:7.3
     stdin_open: true
     tty: true
-    restart: always
     expose:
       - '80'
       - '9000'
     volumes:
-      - app_data:/var/www/html
+      - app_data:/var/www/html/moodle
   onlyoffice-document-server:
     container_name: onlyoffice-document-server
     image: onlyoffice/documentserver:latest
     stdin_open: true
     tty: true
-    restart: always
     expose:
       - '80'
       - '443'
@@ -28,7 +37,6 @@ services:
     image: nginx
     stdin_open: true
     tty: true
-    restart: always
     ports:
       - 80:80
       - 443:443
@@ -45,3 +53,4 @@ volumes:
       device: /home/j_dage01/Development/Learnweb/docker-onlyoffice-moodle/moodle/
       o: bind
   mysql_data:
+  db_data:
